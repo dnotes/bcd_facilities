@@ -1,7 +1,3 @@
 <?php
 
 include_once('bcd_facilities.features.inc');
-
-function bcd_facilities_menu() {
-
-}
