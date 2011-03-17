@@ -1,0 +1,74 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ *
+ */
+
+function bcd_facilities_install() {
+
+  if (!$vid = db_query("SELECT vid FROM {vocabulary} WHERE module = 'bcd_facilities'")) { // intentional assignment of $vid
+    $vocab = array(
+      'name' => t('Facility Type'),
+      'multiple' => 0,
+      'required' => 1,
+      'hierarchy' => 0,
+      'relations' => 0,
+      'module' => 'bcd_facilities',
+      'nodes' => array('facility' => 1),
+    );
+
+    taxonomy_save_vocabulary($vocab);
+    $vid = $vocab['vid'];
+    variable_set("pathauto_taxonomy_{$vid}_pattern", 'facilities/[cat-raw]');
+
+    $gmap_taxonomy = variable_get('gmap_taxonomy_vocabs', array());
+    $gmap_taxonomy[$vid] = $vid;
+    variable_set('gmap_taxonomy_vocabs', $gmap_taxonomy);
+
+    $terms = array(
+      array(
+        'name' => t('House of Worship'),
+        'synonyms' => array(t('Temple'), t('temple')),
+        'weight' => 0,
+        'icon' => 'temple-small',
+      ),
+      array(
+        'name' => t('Point of Interest'),
+        'synonyms' => array(t('point'), t('interest')),
+        'weight' => 1,
+        'icon' => 'small green',
+      ),
+      array(
+        'name' => t('School / Institute facility'),
+        'synonyms' => array(t('school'), t('institute')),
+        'weight' => 2,
+        'icon' => 'small dblue',
+      ),
+    );
+
+    foreach ($terms as $term) {
+      $term['synonyms'] = is_array($term['synonyms']) ? implode("\n", $term['synonyms']) : $term['synonyms'];
+      $icon = $term['icon'];
+      unset ($term['icon']);
+      $term['vid'] = $vid;
+      taxonomy_save_term($term);
+      if (module_exists('gmap_taxonomy')) {
+        db_query("INSERT INTO {gmap_taxonomy_term} (tid, marker) VALUES ({$term['tid']}, '$icon')");
+      }
+    }
+  }
+
+  variable_set('pathauto_node_facility_pattern', 'facilities/[term-raw]/[title-raw]');
+
+}
+
+function bcd_facilities_uninstall() {
+  if ($vid = db_query("SELECT vid FROM {vocabulary} WHERE module = 'bcd_facilities'")) { // intentional assignment of $vid
+    $vocab = taxonomy_get_vocabulary($vid);
+    if ($vocab['nodes'] == array('facilities' => 1)) {
+      drupal_set_message(t('You may manually delete the %name taxonomy', array('%name' => $vocab['name'])));
+    }
+  }
+}
