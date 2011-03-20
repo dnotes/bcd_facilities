@@ -61,6 +61,7 @@ function bcd_facilities_install() {
   }
 
   variable_set('pathauto_node_facility_pattern', 'facilities/[term-raw]/[title-raw]');
+  variable_set('gmap_node_markers_facility', 'small dblue');
 
 }
 
