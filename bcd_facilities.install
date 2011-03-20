@@ -62,6 +62,15 @@ function bcd_facilities_install() {
 
   variable_set('pathauto_node_facility_pattern', 'facilities/[term-raw]/[title-raw]');
   variable_set('gmap_node_markers_facility', 'small dblue');
+  variable_set('content_extra_weights_facility', array(
+    'title' => '-5',
+    'body_field' => '4',
+    'revision_information' => '5',
+    'menu' => '3',
+    'taxonomy' => '-4',
+    'path' => '6',
+    'locations' => '-2',
+  ));
 
 }
 

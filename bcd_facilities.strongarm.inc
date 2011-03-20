@@ -8,21 +8,6 @@ function bcd_facilities_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'content_extra_weights_facility';
-  $strongarm->value = array(
-    'title' => '-5',
-    'body_field' => '4',
-    'revision_information' => '5',
-    'menu' => '3',
-    'taxonomy' => '-4',
-    'path' => '6',
-    'locations' => '-2',
-  );
-
-  $export['content_extra_weights_facility'] = $strongarm;
-  $strongarm = new stdClass;
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
   $strongarm->name = 'location_defaultnum_facility';
   $strongarm->value = '1';
 
